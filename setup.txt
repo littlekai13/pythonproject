@@ -1,0 +1,31 @@
+Modules installed: pip3 install 
+matplotlib
+numpy
+opencv-python
+seaborn
+pandas
+pygame
+tweepy
+nltk
+networkx
+pillow
+
+Package isntalled: 
+sudo apt-get install python3-tk
+sudo apt install python3-pip
+
+
+
+
+cmd: 
+python3 tweepyrun.py
+
+
+references: 
+https://www.youtube.com/watch?v=wlnx-7cm4Gg
+http://docs.tweepy.org/en/3.7.0/api.html#api-reference
+https://www.earthdatascience.org/courses/earth-analytics-python/using-apis-natural-language-processing-twitter/calculate-tweet-word-frequencies-in-python/
+https://stackoverflow.com/questions/15861739/removing-objects-whose-counts-are-less-than-threshold-in-counter
+https://www.python-course.eu/tkinter_buttons.php
+http://effbot.org/pyfaq/why-do-my-tkinter-images-not-appear.htm
+https://pythonspot.com/tk-message-box/
