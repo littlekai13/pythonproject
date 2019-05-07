@@ -29,12 +29,12 @@ class mytweepy:
 				return i["woeid"]
 
 	## tweepy search list searchResults, text
-	def getSearch(self, language, query, counts):
-		return self.api.search(lang=language, q=query, count=counts)
+	def getSearch(self, language, query, counts, rtype):
+		return self.api.search(lang=language, q=query, count=counts, result_type=rtype)
 
 	## tweepy search list searchResults with Cursor, full_text
-	def getfullSearch(self, language, query, counts):
-		return tweepy.Cursor(self.api.search, q=query, tweet_mode='extended', lang=language).items(counts)
+	def getfullSearch(self, language, query, counts, rtype):
+		return tweepy.Cursor(self.api.search, q=query, tweet_mode='extended', lang=language, result_type=rtype).items(counts)
 
 	## tweepy GET home newsfeed tweets top 20 
 	def getHometweet(self): 
