@@ -16,50 +16,60 @@ import termfreq
 
 
 def go_search():
-	#print(entry_word.get().strip())
+
 	lang='en'
 	hashtag=""
 	term = entry_word.get().strip()
 	noRT = " -filter:retweets "
 	query = hashtag + term + noRT
 	count=100
+	rtype='popular' #mixed, recent, popular
 	
 	if term == '': 
 		messagebox.showwarning("Warning","Please type a word.")
 	else: 		
 		mt = mytweepyrun.mytweepy()
 		
-		#NOTE:search for tweets
-		listA = mt.getfullSearch(lang, query, count)
-		all_tweets = [tweet.full_text for tweet in listA]
+		#NOTE:get tweets
+		all_tweets = mt.getfullSearch(lang, query, count, rtype='mixed')
+		all_tweets = [tweet.full_text for tweet in all_tweets]
+
+		#NOTE:get most popular tweet
+		pop_tweet = mt.getfullSearch(lang,query,count, rtype)
+		pop_tweet = [tweet.full_text for tweet in pop_tweet]
 		
 		if all_tweets:
 			#NOTE:remove url links
 			all_tweets_text = [termfreq.remove_url(tweet) for tweet in all_tweets]
+			pop_tweet_text = [termfreq.remove_url(tweet) for tweet in pop_tweet]
 
 			#NOTE:lowercase texts
 			all_tweets_text_lower = [tweet.lower().split() for tweet in all_tweets_text]
+			pop_tweet_text_lower = [tweet.lower().split() for tweet in pop_tweet_text]
 
 			#NOTE:remove common words
 			all_tweets_text_clean = termfreq.removeExtras(all_tweets_text_lower, term)
+			pop_tweet_text_clean = termfreq.removeExtras(pop_tweet_text_lower, term)
 			
 			#NOTE:count frequency of words
-			word_counter = termfreq.getCounter(all_tweets_text_clean)
+			all_word_counter = termfreq.getCounter(all_tweets_text_clean)
+			pop_word_counter = termfreq.getCounter(pop_tweet_text_clean)
+			
+			#NOTE:get most popular photo
+			one_tweet = mt.getfullSearch(lang,query+' filter:images',1, rtype)
+			image_url = mt.getMediainfo(one_tweet)
 
-			#NOTE:get photo
-			image_url = mt.getMediainfo(mt.getfullSearch(lang,query+' filter:images',1))
+			#NOTE:show popular photo and common list
+			show_imglist(all_word_counter, image_url, (pop_tweet[0] if pop_tweet else all_tweets[0]))
 
-			#NOTE:show photo and list
-			show_imglist(word_counter, image_url)
-
-			#NOTE:plot frequency map
-			termfreq.plotFreq(word_counter,term, len(all_tweets))
+			#NOTE:plot frequency map of pop list
+			termfreq.plotFreq(pop_word_counter,term, len(pop_tweet))
 					
 		else: 
 			messagebox.showwarning("Warning","Oh no! No Results Found in Twitter. Sorry!")
 
 
-def show_imglist(wordlist, url):
+def show_imglist(wordlist, url, poptweet):
 	nop = Toplevel()
 	scrollbar=Scrollbar(nop, orient=VERTICAL)
 	scrollbar.pack(side=RIGHT, fill=Y)
@@ -68,6 +78,11 @@ def show_imglist(wordlist, url):
 		mylist.insert(END, tweetcount[0] + " ("+ str(tweetcount[1]) + " count)")
 	mylist.pack(side=LEFT, fill=BOTH)
 	scrollbar.config(command=mylist.yview)
+
+	labelText=StringVar()
+	labelText.set(poptweet)
+	twlabel = Label(nop, textvariable=labelText, wraplength=480)
+	twlabel.pack()
 
 	if url: 
 		response = requests.get(url)

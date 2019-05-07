@@ -54,14 +54,15 @@ def plotFreq(words, term, twcount):
 		if count_tweets['count'].max() > 3: #if maxfreq=4,5,...
 			count_tweets = removeSmall(count_tweets)
 	#print(count_tweets)
-
-	df = count_tweets.sort_values(by='count', ascending=False).plot.barh(x='words', y='count')
-	plt.xticks(size = 8)
-	plt.yticks(size = 10)
-	plt.ylabel('')
-	df.set_title(str(count_tweets.shape[0]) +" Top Words in "+ str(twcount) +" Tweets on "+ term )
-	plt.tight_layout()
-	plt.show()
+	
+	if not count_tweets.empty:
+		df = count_tweets.sort_values(by='count', ascending=False).plot.barh(x='words', y='count')
+		plt.xticks(size = 8)
+		plt.yticks(size = 10)
+		plt.ylabel('')
+		df.set_title(str(count_tweets.shape[0]) +" Words, "+ str(twcount) +" Pop Tweets on "+ term )
+		plt.tight_layout()
+		plt.show()
 
 
 
