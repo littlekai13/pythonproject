@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import tweepy
 import tkinter as tk
 from tkinter import *
+from tkinter import ttk
 import requests
 from io import BytesIO
 
@@ -19,7 +20,7 @@ def go_search():
 
 	lang='en'
 	hashtag=""
-	term = entry_word.get().strip()
+	term= option_poke.get().split(',')[-1].strip().lower()
 	noRT = " -filter:retweets "
 	query = hashtag + term + noRT
 	count=100
@@ -71,19 +72,23 @@ def go_search():
 
 def show_imglist(wordlist, url, poptweet):
 	nop = Toplevel()
+
+	#NOTE: show list
 	scrollbar=Scrollbar(nop, orient=VERTICAL)
 	scrollbar.pack(side=RIGHT, fill=Y)
 	mylist = Listbox(nop, yscrollcommand=scrollbar.set)
 	for tweetcount in wordlist: 
 		mylist.insert(END, tweetcount[0] + " ("+ str(tweetcount[1]) + " count)")
-	mylist.pack(side=LEFT, fill=BOTH)
+	mylist.pack(side=LEFT, fill=BOTH, expand=1)
 	scrollbar.config(command=mylist.yview)
 
-	labelText=StringVar()
-	labelText.set(poptweet)
+	#NOTE: if any, show top post, remove/rename emoji
+	labelText=StringVar()	
+	labelText.set(poptweet.encode('ascii','namereplace') )
 	twlabel = Label(nop, textvariable=labelText, wraplength=480)
-	twlabel.pack()
+	twlabel.pack(fill=BOTH, expand=1)
 
+	#NOTE: if any, show top image
 	if url: 
 		response = requests.get(url)
 		photo = PIL.Image.open(BytesIO(response.content))		
@@ -92,7 +97,7 @@ def show_imglist(wordlist, url, poptweet):
 		
 		label = Label(nop, image=img)
 		label.image=img
-		label.pack()
+		label.pack(fill=BOTH, expand=1)
 
 
 def show_list(wordlist):
@@ -108,7 +113,7 @@ def show_list(wordlist):
 
 def show_image(path):
 	novi = Toplevel()
-	canvas = Canvas(novi) #, width=800, height=600)
+	canvas = Canvas(novi)
 	canvas.pack(fill="both", expand=True)
 	
 	gif1 = ImageTk.PhotoImage(file=path)
@@ -131,32 +136,30 @@ def show_url(url):
 
 
 
-
 if __name__ == '__main__':
 
 	app = Tk()
-	app.title('Twitter Inferences')
+	app.title('TweetDex')
 
 	labelText=StringVar()
-	labelText.set("Want to infer about a word? \n Want to see how social media sees it? \n Type a word here to find out: \n Note: based on the first 100 tweets of now.")
+	labelText.set("Want to infer about a word based on social media? \n Type a word here to find out. Or even pick a Pokemon! ;)")
 	label_intro=Label(app, textvariable=labelText, height=4)
-	label_intro.pack()
+	label_intro.pack(side=TOP)
 
-	userInput=StringVar(None)
-	entry_word=Entry(app,textvariable=userInput,width=50)
-	entry_word.pack()
+
+	with open("pokemonlist.txt", "r") as f:
+		OPTIONS=list(f.read().splitlines())
+	optionText = StringVar(app)	
+	option_poke = ttk.Combobox(app, values=OPTIONS)
+	option_poke.pack()
+
+	buttonPoGo = Button(app, text="Search", command=go_search)
+	buttonPoGo.pack(side=RIGHT)
 
 	buttonQuit = Button(app, text="Quit", command=quit)
 	buttonQuit.pack(side=LEFT)
 
-	buttonGo = Button(app, text="Search", command=go_search)
-	buttonGo.pack(side=RIGHT)
-
 	app.mainloop()
-
-
-
-
 
 
 

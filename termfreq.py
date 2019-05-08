@@ -60,7 +60,7 @@ def plotFreq(words, term, twcount):
 		plt.xticks(size = 8)
 		plt.yticks(size = 10)
 		plt.ylabel('')
-		df.set_title(str(count_tweets.shape[0]) +" Words, "+ str(twcount) +" Pop Tweets on "+ term )
+		df.set_title(str(count_tweets.shape[0]) +" Words, "+ str(twcount) +" Top Tweets on "+ term )
 		plt.tight_layout()
 		plt.show()
 
