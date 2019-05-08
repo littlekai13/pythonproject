@@ -29,3 +29,6 @@ https://stackoverflow.com/questions/15861739/removing-objects-whose-counts-are-l
 https://www.python-course.eu/tkinter_buttons.php
 http://effbot.org/pyfaq/why-do-my-tkinter-images-not-appear.htm
 https://pythonspot.com/tk-message-box/
+https://stackoverflow.com/questions/10923375/remove-all-characters-from-a-string-whos-ordinals-are-out-of-range
+https://www.programiz.com/python-programming/methods/string/encode
+
