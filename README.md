@@ -21,6 +21,6 @@ Packages:
   pillow
   python3-tk
  
- How to use: run 'finalgui.py' file 
+ How to use: run 'finalgui.py' file ; fill in the key and tokens in 'tweepyconstants.py'
  
  
